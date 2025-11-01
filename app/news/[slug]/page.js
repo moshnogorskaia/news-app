@@ -1,11 +1,13 @@
 import { DUMMY_NEWS } from '@/dummy-news';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
 export default function NewsDetailPage({ params }) {
     const { slug } = params;
     const news = DUMMY_NEWS.find((news) => news.slug === slug);
+
     if (!news) {
-        return <div>News not found</div>;
+        notFound();
     }
 
     const { title, image, date, content } = news;
