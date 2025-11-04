@@ -1,11 +1,11 @@
 import NewsList from '@/components/news-list';
-import { getAvailableNewsYears, getNewsForYear } from '@/lib/news';
+import { getAvailableNewsMonths, getAvailableNewsYears, getNewsForYear, getNewsForYearAndMonth } from '@/lib/news';
 import Link from 'next/link';
 
 export default function FilteredNewsPage({ params }) {
   const { filter } = params;
 
-  const links = getAvailableNewsYears();
+  let links = getAvailableNewsYears();
 
   const selectedYear = filter?.[0];
   const selectedMonth = filter?.[1];
@@ -14,6 +14,12 @@ export default function FilteredNewsPage({ params }) {
 
   if (selectedYear && !selectedMonth) {
     news = getNewsForYear(selectedYear);
+    links = getAvailableNewsMonths(selectedYear);
+  }
+
+  if (selectedYear && selectedMonth) {
+    news = getNewsForYearAndMonth(selectedYear, selectedMonth);
+    links = [];
   }
 
   let newsContent = <p>No news found for selected period</p>;
@@ -27,11 +33,14 @@ export default function FilteredNewsPage({ params }) {
       <header id="archive-header">
         <nav>
           <ul>
-            {links.map((year) => (
-              <li key={year}>
-                <Link href={`/archive/${year}`}>{year}</Link>
-              </li>
-            ))}
+            {links.map((year) => {
+                const href = selectedYear ? `/archive/${selectedYear}/${year}` : `/archive/${year}`;
+                return (
+                    <li key={year}>
+                      <Link href={href}>{year}</Link>
+                    </li>
+                  )
+            })}
           </ul>
         </nav>
       </header>
