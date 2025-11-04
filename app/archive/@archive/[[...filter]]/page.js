@@ -1,6 +1,12 @@
 import NewsList from '@/components/news-list';
-import { getAvailableNewsMonths, getAvailableNewsYears, getNewsForYear, getNewsForYearAndMonth } from '@/lib/news';
+import {
+  getAvailableNewsMonths,
+  getAvailableNewsYears,
+  getNewsForYear,
+  getNewsForYearAndMonth,
+} from '@/lib/news';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default function FilteredNewsPage({ params }) {
   const { filter } = params;
@@ -28,18 +34,27 @@ export default function FilteredNewsPage({ params }) {
     newsContent = <NewsList news={news} />;
   }
 
+  if (
+    (selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
+    (selectedMonth && !getAvailableNewsMonths(selectedYear).includes(+selectedMonth))
+  ) {
+    throw new Error('Invalid path');
+  }
+
   return (
     <>
       <header id="archive-header">
         <nav>
           <ul>
             {links.map((year) => {
-                const href = selectedYear ? `/archive/${selectedYear}/${year}` : `/archive/${year}`;
-                return (
-                    <li key={year}>
-                      <Link href={href}>{year}</Link>
-                    </li>
-                  )
+              const href = selectedYear
+                ? `/archive/${selectedYear}/${year}`
+                : `/archive/${year}`;
+              return (
+                <li key={year}>
+                  <Link href={href}>{year}</Link>
+                </li>
+              );
             })}
           </ul>
         </nav>
