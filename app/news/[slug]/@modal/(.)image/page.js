@@ -12,7 +12,7 @@ export default function ImagePage({ params }) {
 
   return (
     <>
-      <div className="modal-backdrop"></div>
+      <div className="modal-backdrop" />
       <dialog className="modal" open>
         <div className="fulscreen-image">
           <img src={`/images/news/${newsItem.image}`} alt={newsItem.title} />
