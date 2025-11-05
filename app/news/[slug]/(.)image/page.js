@@ -2,20 +2,22 @@ import { DUMMY_NEWS } from '@/dummy-news';
 import { notFound } from 'next/navigation';
 
 export default function ImagePage({ params }) {
-    const { slug } = params;
+  const { slug } = params;
 
-    const newsItem = DUMMY_NEWS.find((news) => news.slug === slug);
+  const newsItem = DUMMY_NEWS.find((news) => news.slug === slug);
 
-    if (!newsItem) {
-        notFound();
-    }
+  if (!newsItem) {
+    notFound();
+  }
 
-    return (
-        <>
-        <h1>intercepted</h1>
+  return (
+    <>
+      <div className="modal-backdrop"></div>
+      <dialog className="modal" open>
         <div className="fulscreen-image">
-            <img src={`/images/news/${newsItem.image}`} alt={newsItem.title} />
+          <img src={`/images/news/${newsItem.image}`} alt={newsItem.title} />
         </div>
-        </>
-    );
+      </dialog>
+    </>
+  );
 }
